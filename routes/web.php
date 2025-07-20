@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Price\Index as PriceIndex;
+use App\Livewire\Price\Show as PriceShow;
 use App\Livewire\Product\Create as ProductCreate;
 use App\Livewire\Product\Index as ProductIndex;
 use App\Livewire\Product\Show as ProductShow;
@@ -39,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('urls', UrlIndex::class)->name('urls.index');
     Route::get('urls/show/{url}', UrlShow::class)->name('urls.show');
 
+    Route::get('prices', PriceIndex::class)->name('prices.index');
 });
 
 require __DIR__.'/auth.php';

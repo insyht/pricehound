@@ -18,6 +18,7 @@
                     <flux:navlist.item icon="shopping-bag" :href="route('products.index')" :current="request()->routeIs('products.index')" wire:navigate>{{ __('Products') }}</flux:navlist.item>
                     <flux:navlist.item icon="building-storefront" :href="route('shops.index')" :current="request()->routeIs('shops.index')" wire:navigate>{{ __('Shops') }}</flux:navlist.item>
                     <flux:navlist.item icon="magnifying-glass" :href="route('urls.index')" :current="request()->routeIs('urls.index')" wire:navigate>{{ __('Urls') }}</flux:navlist.item>
+                    <flux:navlist.item icon="currency-euro" :href="route('prices.index')" :current="request()->routeIs('prices.index')" wire:navigate>{{ __('Prices') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
