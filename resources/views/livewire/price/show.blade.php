@@ -20,11 +20,7 @@
             </tr>
             <tr>
                 <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">Urls + price</td>
-                <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">
-                @foreach ($product->urls as $url)
-                    <a href="{{ route('shops.show', $url->shop) }}">{{ $url->shop->name }}</a>: <a href="{{ route('urls.show', $url) }}">{{ $url->url }}</a> <span class="text-green-400">(&euro; TODO {{-- todo --}})</span><br />
-                @endforeach
-                </td>
+                <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400"></td>
             </tr>
         </tbody>
     </table>

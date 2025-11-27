@@ -6,12 +6,9 @@ use App\Jobs\FetchPrices;
 use App\Models\Hound;
 use App\Models\Price;
 use App\Models\Product;
-use App\Models\ProductShop;
-use App\Models\Shop;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Money\Currency;
 use Money\Money;
 
@@ -29,19 +26,6 @@ class Test extends Seeder
             ['name' => 'X', 'email' => 'x@x.com', 'password' => '$2y$12$tO9JazUmOb6B8ooFYnliLe4uMuwBcKNfImfC.9KqcHKHXmrC6y2WK']
         );
 
-        $bol = Shop::create(
-            [
-                'name' => 'Bol.com',
-                'xpath_price' => '//*[@id="buy-block"]/wsp-visibility-switch/section/section/div[1]/div/span[2]',
-            ]
-        );
-        $azerty = Shop::create(
-            [
-                'name' => 'Azerty',
-                'xpath_price' => '//*[@id="product-price-869834"]/span',
-            ]
-        );
-
         $product = Product::create(
             [
                 'title' => 'Philips Hue Bridge Pro',
@@ -56,7 +40,7 @@ class Test extends Seeder
                 'created_by_user_id' => $otherUser->id,
             ]
         );
-        Product::create(
+        $thirdProduct = Product::create(
             [
                 'title' => 'Third product',
                 'ean' => '12345',
@@ -86,37 +70,13 @@ class Test extends Seeder
         );
         $jordy->hound()->associate($defaultHound)->save();
 
-        $anotherProductShop = ProductShop::create(
-            [
-                'product_id' => $anotherProduct->id,
-                'shop_id' => $bol->id,
-                'xpath_price' => 'blabla',
-                'url' => 'https://bol.com/anotherproductlink'
-        ]
-        );
-        $thirdProductShop = ProductShop::create(
-            [
-                'product_id' => $product->id,
-                'shop_id' => $azerty->id,
-                'xpath_price' => 'blabla',
-                'url' => 'https://azerty.nl/hue-bridge-pro'
-            ]
-        );
-        $productShop = ProductShop::create(
-            [
-                'product_id' => $product->id,
-                'shop_id' => $bol->id,
-                'xpath_price' => 'blabla',
-                'url' => 'https://bol.com/hue-bridge-pro'
-          ]
-        );
-
         Price::create(
             [
                 'price' => new Money(8999, new Currency('EUR')),
                 'currency' => 'EUR',
                 'hound_id' => $defaultHound->id,
-                'product_shop_id' => $productShop->id,
+                'product_id' => $product->id,
+                'url' => 'https://www.bol.com/philips-hue-bridge-pro',
             ]
         );
         Price::create(
@@ -124,7 +84,8 @@ class Test extends Seeder
                 'price' => new Money(9500, new Currency('EUR')),
                 'currency' => 'EUR',
                 'hound_id' => $defaultHound->id,
-                'product_shop_id' => $productShop->id,
+                'product_id' => $product->id,
+                'url' => 'https://www.azerty.nl/philips-hue-bridge-pro',
             ]
         );
         Price::create(
@@ -132,7 +93,8 @@ class Test extends Seeder
                 'price' => new Money(7700, new Currency('EUR')),
                 'currency' => 'EUR',
                 'hound_id' => $otherHound->id,
-                'product_shop_id' => $productShop->id,
+                'product_id' => $product->id,
+                'url' => 'https://www.bol.com/philips-hue-bridge-pro',
             ]
         );
         Price::create(
@@ -140,7 +102,8 @@ class Test extends Seeder
                 'price' => new Money(6700, new Currency('EUR')),
                 'currency' => 'EUR',
                 'hound_id' => $defaultHound->id,
-                'product_shop_id' => $anotherProductShop->id,
+                'product_id' => $anotherProduct->id,
+                'url' => 'https://www.bol.com/another-product',
             ]
         );
         Price::create(
@@ -148,7 +111,8 @@ class Test extends Seeder
                 'price' => new Money(5900, new Currency('EUR')),
                 'currency' => 'EUR',
                 'hound_id' => $defaultHound->id,
-                'product_shop_id' => $thirdProductShop->id,
+                'product_id' => $thirdProduct->id,
+                'url' => 'https://www.bol.com/third-product',
             ]
         );
 

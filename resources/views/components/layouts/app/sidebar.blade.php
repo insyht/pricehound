@@ -16,7 +16,6 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('pricehound.Dashboard') }}</flux:navlist.item>
 
                     <flux:navlist.item icon="shopping-bag" :href="route('products.index')" :current="request()->routeIs('products.index')" wire:navigate>{{ __('pricehound.My products') }}</flux:navlist.item>
-                    <flux:navlist.item icon="building-storefront" :href="route('shops.index')" :current="request()->routeIs('shops.index')" wire:navigate>{{ __('pricehound.Shops') }}</flux:navlist.item>
                     <flux:navlist.item icon="currency-euro" :href="route('prices.index')" :current="request()->routeIs('prices.index')" wire:navigate>{{ __('pricehound.Prices') }}</flux:navlist.item>
                     <flux:navlist.item icon="bone" :href="route('hounds.index')" :current="request()->routeIs('hounds.index')" wire:navigate>{{ __('pricehound.Hounds') }}</flux:navlist.item>
                 </flux:navlist.group>

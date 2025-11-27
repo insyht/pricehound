@@ -11,11 +11,10 @@ class Index extends Component
 
     public function mount()
     {
-        $allMyPrices = Price::mine()->with('productShop')->get();
-        $allMyPrices = $allMyPrices->groupBy(function (Price $price, int $key) {
-            return 'product-' . $price->productShop->product_id;
+        $allMyPrices = Price::mine()->with('product')->get();
+        $allMyPrices = $allMyPrices->groupBy(function (Price $price) {
+            return 'product-' . $price->product_id;
         });
-        $before = $allMyPrices->toArray();
 
         $lowestPrices = collect();
         $allMyPrices->each(function ($pricesForProduct) use ($lowestPrices) {

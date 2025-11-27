@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Enums\HoundEndpoints;
 use App\Models\Hound;
 use App\Models\Price;
-use App\Models\ProductShop;
+use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,7 +20,7 @@ class FetchPrice implements ShouldQueue, ShouldBeUnique
 {
     use Queueable;
 
-    public function __construct(protected Hound $hound, protected ProductShop $productShop)
+    public function __construct(protected Hound $hound, protected Product $product)
     {
     }
 
@@ -34,9 +34,9 @@ class FetchPrice implements ShouldQueue, ShouldBeUnique
             $url = rtrim($this->hound->url, '/') . '/';
             $url .= sprintf(
                 HoundEndpoints::FetchPriceDebug->value, //HoundEndpoints::FetchPrice->value, // todo Use the correct one after testing
-                $this->productShop->product->ean,
+                $this->product->ean,
                 Price::where('hound_id', $this->hound->id)
-                     ->where('product_shop_id', $this->productShop->id)
+                     ->where('product_id', $this->product->id)
                      ->latest()
                      ->first()->created_at->timestamp
             );
@@ -44,19 +44,20 @@ class FetchPrice implements ShouldQueue, ShouldBeUnique
 
             if ($response->failed()) {
                 Log::warning(
-                    'Could not fetch price from hound (rsponse failed), dispatching PingHound to check availability',
-                    ['hound' => $this->hound->id, 'productShop' => $this->productShop->id]
+                    'Could not fetch price from hound (response failed), dispatching PingHound to check availability',
+                    ['hound' => $this->hound->id, 'product' => $this->product->id]
                 );
                 PingHound::dispatchSync($this->hound);
 
                 return;
-            } elseif ($response->successful() && $response->json('price', null) !== null && $response->json('currency', null) !== null && $response->json('created_at', null) !== null) {
+            } elseif ($response->successful() && $response->json('price') !== null && $response->json('currency') !== null && $response->json('url') !== null && $response->json('created_at') !== null) {
                 Price::create(
                     [
                         'price' => new Money((int) $response->json('price'), new Currency($response->json('currency'))),
                         'currency' => $response->json('currency'),
+                        'url' => $response->json('url'),
                         'hound_id' => $this->hound->id,
-                        'product_shop_id' => $this->productShop->id,
+                        'product_id' => $this->product->id,
                         'created_at' => $response->json('created_at'), // todo Of misschien een extra kolom aanmaken in prices waarin ik opsla wanneer de hound deze prijs opgezocht heeft?
                         'updated_at' => Carbon::now(),
                     ]
@@ -64,7 +65,7 @@ class FetchPrice implements ShouldQueue, ShouldBeUnique
             } else {
                 Log::warning(
                     'Could not fetch price from hound (invalid response)',
-                    ['hound' => $this->hound->id, 'productShop' => $this->productShop->id, 'response' => $response->body() ?? '']
+                    ['hound' => $this->hound->id, 'product' => $this->product->id, 'response' => $response->body() ?? '']
                 );
 
                 return;
@@ -73,7 +74,7 @@ class FetchPrice implements ShouldQueue, ShouldBeUnique
         } catch (Throwable $t) {
             Log::warning(
                 'Could not fetch price from hound, dispatching PingHound to check availability',
-                ['hound' => $this->hound->id, 'productShop' => $this->productShop->id, 'error' => $t->getMessage()]
+                ['hound' => $this->hound->id, 'product' => $this->product->id, 'error' => $t->getMessage()]
             );
             PingHound::dispatchSync($this->hound);
 
@@ -84,6 +85,6 @@ class FetchPrice implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId()
     {
-        return $this->hound->id . '_' . $this->productShop->id;
+        return $this->hound->id . '_' . $this->product->id;
     }
 }

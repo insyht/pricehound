@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Hound;
-use App\Models\ProductShop;
+use App\Models\Product;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -21,7 +21,7 @@ class FetchPricesByHound implements ShouldQueue
             return;
         }
 
-        foreach (ProductShop::all() as $item) {
+        foreach (Product::all() as $item) {
             FetchPrice::dispatch($this->hound, $item);
         }
     }

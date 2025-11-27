@@ -3,7 +3,7 @@
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
                 <th class="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">{{ __('pricehound.Title') }}</th>
-                <th class="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">{{ __('pricehound.Shop') }}</th>
+                <th class="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">{{ __('pricehound.Url') }}</th>
                 <th class="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">{{ __('pricehound.Price') }}</th>
                 <th class="border border-gray-300 p-4 text-left font-semibold text-gray-900 dark:border-gray-600 dark:text-gray-200">{{ __('pricehound.LastChecked') }}d</th>
             </tr>
@@ -12,13 +12,13 @@
         @foreach ($prices as $lowestPricePerProduct)
                 <tr>
                     <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $lowestPricePerProduct->product->title }}</td>
-                    <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $lowestPricePerProduct->shop->name }}</td>
+                    <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $lowestPricePerProduct->url }}</td>
                     <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">
-                        @if ($lowestPricePerProduct->productShop->url)
-                            <a href="{{ $lowestPricePerProduct->productShop->url }}" target="_blank">
+                        @if ($lowestPricePerProduct->url)
+                            <a href="{{ $lowestPricePerProduct->url }}" target="_blank">
                         @endif
                         {{ $lowestPricePerProduct->price->getAmount() / 100 }} {{ $lowestPricePerProduct->currency }}
-                        @if ($lowestPricePerProduct->productShop->url)
+                        @if ($lowestPricePerProduct->url)
                             </a>
                         @endif
                     </td>

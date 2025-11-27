@@ -7,9 +7,6 @@ use App\Livewire\Price\Show as PriceShow;
 use App\Livewire\Product\Add as ProductAdd;
 use App\Livewire\Product\Index as ProductIndex;
 use App\Livewire\Product\Show as ProductShow;
-use App\Livewire\Shop\Create as ShopCreate;
-use App\Livewire\Shop\Index as ShopIndex;
-use App\Livewire\Shop\Show as ShopShow;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -27,10 +24,6 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
-
-    Route::get('shops/create', ShopCreate::class)->name('shops.create');
-    Route::get('shops', ShopIndex::class)->name('shops.index');
-    Route::get('shops/show/{shop}', ShopShow::class)->name('shops.show');
 
     Route::get('products/add', ProductAdd::class)->name('products.add');
     Route::get('products', ProductIndex::class)->name('products.index');

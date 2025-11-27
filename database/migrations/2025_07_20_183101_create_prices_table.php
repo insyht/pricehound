@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id();
             $table->integer('price')->comment('Price in cents');
             $table->string('currency', 3)->default('EUR')->comment('Currency code, e.g., EUR, USD');
+            $table->text('url')->default('');
+            $table->unsignedBigInteger('product_id')->index();
             $table->timestamps();
+
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

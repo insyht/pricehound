@@ -25,13 +25,8 @@ class Product extends Model
         return $this->belongsTo(User::class, 'created_by_user_id');
     }
 
-    public function shops()
-    {
-        return $this->hasMany(Shop::class);
-    }
-
     public function prices()
     {
-        return $this->hasManyThrough(Price::class, ProductShop::class)->orderByDesc('created_at');
+        return $this->hasMany(Price::class)->orderByDesc('created_at');
     }
 }
