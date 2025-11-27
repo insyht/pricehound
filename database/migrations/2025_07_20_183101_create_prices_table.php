@@ -13,16 +13,9 @@ return new class extends Migration
     {
         Schema::create('prices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id')->index();
-            $table->unsignedBigInteger('shop_id')->index();
-            $table->text('xpath_price');
             $table->integer('price')->comment('Price in cents');
             $table->string('currency', 3)->default('EUR')->comment('Currency code, e.g., EUR, USD');
             $table->timestamps();
-
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
-
         });
     }
 

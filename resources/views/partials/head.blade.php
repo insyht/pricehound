@@ -15,3 +15,4 @@
 
 <tallstackui:script />
 @livewireStyles
+@livewireScripts

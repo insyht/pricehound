@@ -12,6 +12,7 @@ class Product extends Model
     protected $fillable = [
         'title',
         'ean',
+        'created_by_user_id',
     ];
 
     public function urls()
@@ -19,10 +20,18 @@ class Product extends Model
         return $this->hasMany(Url::class);
     }
 
-    public function scopeMine($query)
+    public function creator()
     {
-        return $query->whereHas('urls', function ($q) {
-            $q->where('user_id', auth()?->id() ?? 0);
-        });
+        return $this->belongsTo(User::class, 'created_by_user_id');
+    }
+
+    public function shops()
+    {
+        return $this->hasMany(Shop::class);
+    }
+
+    public function prices()
+    {
+        return $this->hasManyThrough(Price::class, ProductShop::class)->orderByDesc('created_at');
     }
 }

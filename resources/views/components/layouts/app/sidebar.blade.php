@@ -12,13 +12,13 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                <flux:navlist.group :heading="__('pricehound.Navigation')" class="grid">
+                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('pricehound.Dashboard') }}</flux:navlist.item>
 
-                    <flux:navlist.item icon="shopping-bag" :href="route('products.index')" :current="request()->routeIs('products.index')" wire:navigate>{{ __('Products') }}</flux:navlist.item>
-                    <flux:navlist.item icon="building-storefront" :href="route('shops.index')" :current="request()->routeIs('shops.index')" wire:navigate>{{ __('Shops') }}</flux:navlist.item>
-                    <flux:navlist.item icon="magnifying-glass" :href="route('urls.index')" :current="request()->routeIs('urls.index')" wire:navigate>{{ __('Urls') }}</flux:navlist.item>
-                    <flux:navlist.item icon="currency-euro" :href="route('prices.index')" :current="request()->routeIs('prices.index')" wire:navigate>{{ __('Prices') }}</flux:navlist.item>
+                    <flux:navlist.item icon="shopping-bag" :href="route('products.index')" :current="request()->routeIs('products.index')" wire:navigate>{{ __('pricehound.My products') }}</flux:navlist.item>
+                    <flux:navlist.item icon="building-storefront" :href="route('shops.index')" :current="request()->routeIs('shops.index')" wire:navigate>{{ __('pricehound.Shops') }}</flux:navlist.item>
+                    <flux:navlist.item icon="currency-euro" :href="route('prices.index')" :current="request()->routeIs('prices.index')" wire:navigate>{{ __('pricehound.Prices') }}</flux:navlist.item>
+                    <flux:navlist.item icon="bone" :href="route('hounds.index')" :current="request()->routeIs('hounds.index')" wire:navigate>{{ __('pricehound.Hounds') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 

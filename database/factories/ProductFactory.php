@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class ProductFactory extends Factory
         return [
             'title' => fake()->word(),
             'ean' => (int) fake()->ean13(),
+            'created_by_user_id' => User::factory(),
         ];
     }
 }

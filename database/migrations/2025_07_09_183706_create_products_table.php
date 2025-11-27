@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->bigInteger('ean')->nullable()->unique()->index();
+            $table->unsignedBigInteger('created_by_user_id')->nullable()->index();
             $table->timestamps();
+
+            $table->foreign('created_by_user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

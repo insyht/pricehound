@@ -10,7 +10,7 @@ class Index extends Component
 
     public function mount()
     {
-        $this->shops = \App\Models\Shop::mine()->get();
+        $this->shops = \App\Models\Shop::all();
     }
 
     public function render()

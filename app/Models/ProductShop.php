@@ -2,31 +2,21 @@
 
 namespace App\Models;
 
-use App\Interfaces\BelongsToUserInterface;
-use App\Traits\BelongsToUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Url extends Model implements BelongsToUserInterface
+class ProductShop extends Model
 {
-    use BelongsToUser;
     use HasFactory;
 
     protected $fillable = [
-        'url',
+        'id',
         'product_id',
         'shop_id',
-        'user_id'
+        'url',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->user_id = auth()?->id();
-        });
-    }
+    protected $table = 'product_shop';
 
     public function product()
     {
@@ -36,5 +26,6 @@ class Url extends Model implements BelongsToUserInterface
     public function shop()
     {
         return $this->belongsTo(Shop::class);
+
     }
 }

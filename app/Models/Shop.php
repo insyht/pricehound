@@ -14,15 +14,8 @@ class Shop extends Model
         'xpath_price',
     ];
 
-    public function urls()
+    public function products()
     {
-        return $this->hasMany(Url::class);
-    }
-
-    public function scopeMine($query)
-    {
-        return $query->whereHas('urls', function ($q) {
-            $q->where('user_id', auth()?->id() ?? 0);
-        });
+        return $this->hasMany(Product::class);
     }
 }

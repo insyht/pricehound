@@ -11,17 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('urls', function (Blueprint $table) {
+        Schema::create('product_shop', function (Blueprint $table) {
             $table->id();
-            $table->text('url');
             $table->unsignedBigInteger('product_id')->index();
             $table->unsignedBigInteger('shop_id')->index();
-            $table->unsignedBigInteger('user_id')->index();
+            $table->text('xpath_price')->nullable();
+            $table->text('url')->nullable();
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+        Schema::table('prices', function (Blueprint $table) {
+            $table->unsignedBigInteger('product_shop_id')->nullable()->index()->before('created_at');
+            $table->foreign('product_shop_id')->references('id')->on('product_shop')->onDelete('set null');
         });
     }
 
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('urls');
+        //
     }
 };
