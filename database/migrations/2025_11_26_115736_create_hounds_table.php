@@ -22,11 +22,13 @@ return new class extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('hound_id')->nullable()->before('created_at');
+            $table->unsignedBigInteger('hound_id')->nullable(false)->before('created_at');
+            $table->text('hound_api_key')->nullable(false)->default('')->after('hound_id');
+            $table->foreign('hound_id')->references('id')->on('hounds')->cascadeOnUpdate()->cascadeOnDelete();
         });
         Schema::table('prices', function (Blueprint $table) {
-            $table->unsignedBigInteger('hound_id')->nullable()->before('created_at');
-            $table->foreign('hound_id')->references('id')->on('hounds')->onDelete('set null');
+            $table->unsignedBigInteger('hound_id')->nullable(false)->before('created_at');
+            $table->foreign('hound_id')->references('id')->on('hounds')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

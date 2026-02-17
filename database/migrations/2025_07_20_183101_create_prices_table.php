@@ -17,9 +17,12 @@ return new class extends Migration
             $table->string('currency', 3)->default('EUR')->comment('Currency code, e.g., EUR, USD');
             $table->text('url')->default('');
             $table->unsignedBigInteger('product_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->timestamp('fetched_at')->comment('When did we fetch this price from the Hound (not to be confused with the timestamp the Hound fetched the price fron the webshop)?');
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

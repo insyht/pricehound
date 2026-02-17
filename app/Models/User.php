@@ -22,6 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'hound_id',
+        'hound_api_key',
+        'next_fetch',
+        'fetch_interval',
     ];
 
     /**
@@ -44,7 +48,20 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'next_fetch' => 'datetime',
+            'fetch_interval' => 'integer',
         ];
+    }
+
+    protected static function booted()
+    {
+        parent::booted();
+
+        static::saving(function ($user) {
+            if ($user->hound_id === null) {
+                $user->hound_id = Hound::where('name', 'Pricehound default')->first()->id;
+            }
+        });
     }
 
     /**
@@ -67,5 +84,10 @@ class User extends Authenticatable
     public function hound()
     {
         return $this->belongsTo(Hound::class);
+    }
+
+    public function prices()
+    {
+        return $this->hasMany(Price::class);
     }
 }

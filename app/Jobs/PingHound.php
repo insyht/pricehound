@@ -15,6 +15,8 @@ class PingHound implements ShouldQueue, ShouldBeUnique
 {
     use Queueable;
 
+    public int $uniqueFor = 3600;
+
     public function __construct(protected Hound $hound)
     {
     }
@@ -22,11 +24,11 @@ class PingHound implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         try {
-            $response = Http::get(rtrim($this->hound->url, '/') . '/' . HoundEndpoints::Info->value);
+            $response = Http::get(rtrim($this->hound->url, '/') . '/' . HoundEndpoints::Ping->value);
 
             if ($response->failed()) {
                 $this->hound->update(['online' => false]);
-            } elseif ($response->successful()) {
+            } elseif ($response->successful() && !empty($response->json('name'))) {
                 $this->hound->update(
                     [
                         'online' => true,
@@ -35,6 +37,14 @@ class PingHound implements ShouldQueue, ShouldBeUnique
                         'description' => $response->json('description', ''),
                     ]
                 );
+                Log::error(
+                    'Successfully pinged hound',
+                    [
+                        'houndId' => $this->hound->id,
+                        'url' => $this->hound->url,
+                    ]
+                );
+
             }
         } catch (Throwable $t) {
             $this->hound->update(['online' => false]);
@@ -46,6 +56,7 @@ class PingHound implements ShouldQueue, ShouldBeUnique
                     'error' => $t->getMessage(),
                 ]
             );
+            // todo Maybe also notify users?
         }
     }
 

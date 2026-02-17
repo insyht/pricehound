@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum HoundEndpoints: string
 {
-    case Info = 'info';
-    case FetchPrice = 'fetch/%s/%';
-    case FetchPriceDebug = 'fetch';
+    case Ping = 'ping';
+    case Profile = 'user';
+    case FetchPricesForProducts = 'fetch/%s'; // string of an imploded (comma-separated) array of EANs
 }

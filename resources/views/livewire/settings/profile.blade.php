@@ -98,6 +98,11 @@ new class extends Component {
                 @endif
             </div>
 
+            <!-- todo Deze moet ik nog werkend maken -->
+            <flux:input wire:model="hound" :label="__('Hound')" type="text" required />
+            <flux:input wire:model="hound_api_key" :label="__('Hound API key')" type="text" />
+
+
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
                     <flux:button variant="primary" type="submit" class="w-full">{{ __('Save') }}</flux:button>

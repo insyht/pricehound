@@ -19,6 +19,7 @@ return [
     'My products' => 'My products',
     'Urls' => 'Urls',
     'Prices' => 'Prices',
+    'Deals' => 'Deals',
     'AddProduct' => 'Add product',
     'Title' => 'Title',
     'EAN' => 'EAN',

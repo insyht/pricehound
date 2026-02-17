@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Jobs\FetchPrices;
+use App\Jobs\FetchPricesForUser;
 use App\Models\Hound;
 use App\Models\Price;
 use App\Models\Product;
@@ -19,11 +19,36 @@ class Test extends Seeder
      */
     public function run(): void
     {
+        $otherHound = Hound::create(
+            [
+                'name' => 'Pricehound test',
+                'description' => 'TestHound',
+                'url' => 'https://iwsklantenz.nl/pricehound',
+                'online' => false,
+                'last_ping' => null,
+            ]
+        );
+        $defaultHound = Hound::create(
+            [
+                'name' => 'Pricehound default',
+                'description' => 'Official Hound',
+                'url' => 'https://pricehound-api.ddev.site/api',
+                'online' => true,
+                'last_ping' => Carbon::now(),
+            ]
+        );
+
         $jordy = User::create(
-            ['name' => 'Jordy', 'email' => 'jordythijs@gmail.com', 'password' => '$2y$12$tO9JazUmOb6B8ooFYnliLe4uMuwBcKNfImfC.9KqcHKHXmrC6y2WK']
+            [
+                'name' => 'Jordy',
+                'email' => 'jordythijs@gmail.com',
+                'password' => '$2y$12$tO9JazUmOb6B8ooFYnliLe4uMuwBcKNfImfC.9KqcHKHXmrC6y2WK',
+                'fetch_interval' => 5,
+                'hound_api_key' => '2|wXMMrddnhGMkiAiwkJadPlufatPHdNMozwUxLwKE89f22252',
+            ]
         );
         $otherUser = User::create(
-            ['name' => 'X', 'email' => 'x@x.com', 'password' => '$2y$12$tO9JazUmOb6B8ooFYnliLe4uMuwBcKNfImfC.9KqcHKHXmrC6y2WK']
+            ['name' => 'X', 'email' => 'x@x.com', 'password' => '$2y$12$tO9JazUmOb6B8ooFYnliLe4uMuwBcKNfImfC.9KqcHKHXmrC6y2WK', 'fetch_interval' => 5]
         );
 
         $product = Product::create(
@@ -49,73 +74,64 @@ class Test extends Seeder
         );
 
         $jordy->products()->save($product);
-
-        $otherHound = Hound::create(
-            [
-                'name' => 'Pricehound test',
-                'description' => 'TestHound',
-                'url' => 'https://iwsklantenz.nl/pricehound',
-                'online' => false,
-                'last_ping' => null,
-            ]
-        );
-        $defaultHound = Hound::create(
-            [
-                'name' => 'Pricehound default',
-                'description' => 'Official Hound',
-                'url' => 'https://iwsklanten.nl/pricehound',
-                'online' => true,
-                'last_ping' => Carbon::now(),
-            ]
-        );
         $jordy->hound()->associate($defaultHound)->save();
 
         Price::create(
             [
                 'price' => new Money(8999, new Currency('EUR')),
                 'currency' => 'EUR',
+                'user_id' => $jordy->id,
                 'hound_id' => $defaultHound->id,
                 'product_id' => $product->id,
                 'url' => 'https://www.bol.com/philips-hue-bridge-pro',
+                'fetched_at' => fake()->dateTime(),
             ]
         );
         Price::create(
             [
                 'price' => new Money(9500, new Currency('EUR')),
                 'currency' => 'EUR',
+                'user_id' => $jordy->id,
                 'hound_id' => $defaultHound->id,
                 'product_id' => $product->id,
                 'url' => 'https://www.azerty.nl/philips-hue-bridge-pro',
+                'fetched_at' => fake()->dateTime(),
             ]
         );
         Price::create(
             [
                 'price' => new Money(7700, new Currency('EUR')),
                 'currency' => 'EUR',
+                'user_id' => $jordy->id,
                 'hound_id' => $otherHound->id,
                 'product_id' => $product->id,
                 'url' => 'https://www.bol.com/philips-hue-bridge-pro',
+                'fetched_at' => fake()->dateTime(),
             ]
         );
         Price::create(
             [
                 'price' => new Money(6700, new Currency('EUR')),
                 'currency' => 'EUR',
+                'user_id' => $otherUser->id,
                 'hound_id' => $defaultHound->id,
                 'product_id' => $anotherProduct->id,
                 'url' => 'https://www.bol.com/another-product',
+                'fetched_at' => fake()->dateTime(),
             ]
         );
         Price::create(
             [
                 'price' => new Money(5900, new Currency('EUR')),
                 'currency' => 'EUR',
+                'user_id' => $jordy->id,
                 'hound_id' => $defaultHound->id,
                 'product_id' => $thirdProduct->id,
                 'url' => 'https://www.bol.com/third-product',
+                'fetched_at' => fake()->dateTime(),
             ]
         );
 
-        FetchPrices::dispatch();
+        FetchPricesForUser::dispatch($jordy);
     }
 }

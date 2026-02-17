@@ -16,8 +16,10 @@ class PriceFactory extends Factory
         return [
             'price' => fake()->numberBetween(1, 10000000), // between one cent and 100.000 euros
             'currency' => fake()->currencyCode(),
-            'hound_id' => Hound::factory(),
+            'url' => fake()->url(),
             'product_id' => Product::factory(),
+            'hound_id' => Hound::factory(),
+            'fetched_at' => fake()->dateTime(),
         ];
     }
 }

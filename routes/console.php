@@ -1,5 +1,3 @@
 <?php
 
-use App\Jobs\FetchPrices;
-
-Schedule::job(new FetchPrices())->hourly()->withoutOverlapping();
+Schedule::command('app:fetch-scheduler')->everyMinute()->withoutOverlapping()->runInBackground();
