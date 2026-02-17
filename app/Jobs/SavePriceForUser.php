@@ -39,7 +39,7 @@ class SavePriceForUser implements ShouldQueue, ShouldBeUnique
                  ->orderByDesc('fetched_at')
                 ->first();
             if (!$latestPrice || !$latestPrice->price->equals($priceValue)) {
-                Price::create(
+                $price = Price::create(
                     [
                         'price' => $priceValue,
                         'currency' => $this->currency,
@@ -51,6 +51,7 @@ class SavePriceForUser implements ShouldQueue, ShouldBeUnique
                         'created_at' => $this->createdAt,
                     ]
                 );
+                NotifyUserAboutPrice::dispatch($this->user, $price);
             }
         } catch (Throwable $t) {
             Log::warning(
