@@ -48,7 +48,7 @@ class SavePriceForUser implements ShouldQueue
                         'created_at' => $this->createdAt,
                     ]
                 );
-                NotifyUserAboutPrice::dispatch($this->user, $price);
+                NotifyUserAboutPrice::dispatch($price);
             }
         } catch (Throwable $t) {
             Log::warning(

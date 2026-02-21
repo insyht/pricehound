@@ -52,6 +52,16 @@ class Price extends Model
     {
         return $this->belongsTo(Hound::class);
     }
+
+    public function rules()
+    {
+        return PriceRule::query()->join('product_user', 'price_rules.product_user_id', '=', 'product_user.id')
+                                 ->where('product_user.product_id', $this->product_id)
+                                 ->where('product_user.user_id', $this->user_id)
+                                 ->select('price_rules.*')
+                                 ->get();
+    }
+
     public function scopeCheapest($query)
     {
         // todo Er is nu voortaan een user_id in deze tabel, laat onderstaande query hier rekening mee houden

@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use App\Models\Price;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -13,7 +12,7 @@ class PriceChange extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(protected Price $price, protected User $user)
+    public function __construct(protected Price $price)
     {
     }
 
@@ -28,10 +27,10 @@ class PriceChange extends Notification implements ShouldQueue
         // todo Replace hardcoded texts with translations
         return (new MailMessage)
             ->subject('Prijs van een product is gewijzigd')
-            ->greeting(sprintf('Hey %s,', $this->user->name))
+            ->greeting(sprintf('Hey %s,', $this->price->user->name))
             ->line(
                 sprintf(
-                    '%s is nu te koop voor %s %s.',
+                    '%s is nu te koop voor %s %01.2f.',
                     $this->price->product->title,
                     $this->price->currency,
                     $this->price->price->getAmount() / 100

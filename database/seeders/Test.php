@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PriceRuleTypes;
 use App\Jobs\FetchPricesForUser;
 use App\Models\Hound;
 use App\Models\Price;
+use App\Models\PriceRule;
 use App\Models\Product;
+use App\Models\ProductUser;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -129,6 +132,14 @@ class Test extends Seeder
                 'product_id' => $thirdProduct->id,
                 'url' => 'https://www.bol.com/third-product',
                 'fetched_at' => fake()->dateTime(),
+            ]
+        );
+
+        PriceRule::create(
+            [
+                'product_user_id' => ProductUser::where('user_id', $jordy->id)->where('product_id', $product->id)->first()->id,
+                'type' => PriceRuleTypes::BELOW_PRICE->value,
+                'value' => '8000',
             ]
         );
 

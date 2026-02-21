@@ -90,4 +90,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Price::class);
     }
+
+    public function priceRules()
+    {
+        return $this->hasManyThrough(PriceRule::class, ProductUser::class);
+    }
 }
