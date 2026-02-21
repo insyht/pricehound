@@ -6,7 +6,6 @@ use App\Models\Price;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -14,11 +13,9 @@ use Money\Currency;
 use Money\Money;
 use Throwable;
 
-class SavePriceForUser implements ShouldQueue, ShouldBeUnique
+class SavePriceForUser implements ShouldQueue
 {
     use Queueable;
-
-    public int $uniqueFor = 3600;
 
     public function __construct(
         protected User $user,
@@ -59,15 +56,5 @@ class SavePriceForUser implements ShouldQueue, ShouldBeUnique
                 ['data' => $this, 'error' => $t->getMessage()]
             );
         }
-    }
-
-    public function uniqueId(): string
-    {
-        return sprintf(
-            '%s_%s_%d',
-            $this->user->id,
-            $this->product->id,
-            $this->price
-        );
     }
 }

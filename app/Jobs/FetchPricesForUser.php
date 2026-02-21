@@ -13,11 +13,9 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class FetchPricesForUser implements ShouldQueue, ShouldBeUnique
+class FetchPricesForUser implements ShouldQueue
 {
     use Queueable;
-
-    public int $uniqueFor = 3600;
 
     public function __construct(protected User $user)
     {
@@ -86,10 +84,5 @@ class FetchPricesForUser implements ShouldQueue, ShouldBeUnique
         }
 
         $this->user->update(['next_fetch' => Carbon::now()->addMinutes($this->user->fetch_interval)]);
-    }
-
-    public function uniqueId(): int
-    {
-        return $this->user->id;
     }
 }
