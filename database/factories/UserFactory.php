@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Hound;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -29,6 +30,10 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'hound_id' => Hound::factory()->create()->id,
+            'hound_api_key' => Str::random(10),
+            'next_fetch' => fake()->dateTime(),
+            'fetch_interval' => 5,
         ];
     }
 

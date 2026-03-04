@@ -12,7 +12,7 @@ class HoundFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->word(),
+            'name' => fake()->word(),
             'description' => fake()->text(),
             'url' => fake()->url(),
             'last_ping' => fake()->dateTimeBetween('-3 days'),

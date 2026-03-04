@@ -14,6 +14,12 @@ class PriceRule extends Model
 
     public function user()
     {
-        $this->hasOneThrough(User::class, ProductUser::class);
+        return $this->hasOneThrough(User::class, ProductUser::class, 'id', 'id', 'product_user_id', 'user_id');
+
+    }
+
+    public function product()
+    {
+        return $this->hasOneThrough(Product::class, ProductUser::class, 'id', 'id', 'product_user_id', 'product_id');
     }
 }
