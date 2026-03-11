@@ -30,7 +30,7 @@ class NotifyUserAboutPrice implements ShouldQueue
         }
 
         if ($helper->shouldSendPriceNotification($lastPriceBeforeThisOne, $this->price)) {
-            $this->price->user->notify(new PriceChange($this->price));
+            $this->price->user->notify(new PriceChange($lastPriceBeforeThisOne, $this->price));
         } else {
             Log::debug(
                 'No notification sent because the price change did not match any price rules',

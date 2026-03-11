@@ -49,4 +49,11 @@ return [
     'LastChecked' => 'Last checked',
     'WhenPriceFetched' => 'Fetch date and time',
     'HoundUsed' => 'Hound used',
+
+    'NotificationPriceChangeSubject' => 'Change in product price',
+    'NotificationPriceChangeGreeting' => 'Hey %s,',
+    'NotificationPriceChangeLine1' => '%s is now priced at %s %01.2f.',
+    'NotificationPriceChangeLine2' => 'The old price was %s %01.2f (%s%01.1f%%).',
+    'NotificationPriceChangeLine3' => 'This notification was triggered by the following rule(s): %s',
+    'NotificationPriceChangeAction' => 'View the new price in the shop',
 ];
