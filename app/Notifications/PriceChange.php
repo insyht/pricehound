@@ -31,7 +31,7 @@ class PriceChange extends Notification implements ShouldQueue
         }
 
         return (new MailMessage)
-            ->subject(__('pricehound.NotificationPriceChangeSubject'))
+            ->subject(__('pricehound.NotificationPriceChangeSubject', ['productname' => $this->newPrice->product->title]))
             ->greeting(sprintf(__('pricehound.NotificationPriceChangeGreeting'), $this->newPrice->user->name))
             ->line(
                 sprintf(

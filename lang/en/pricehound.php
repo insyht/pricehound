@@ -50,7 +50,7 @@ return [
     'WhenPriceFetched' => 'Fetch date and time',
     'HoundUsed' => 'Hound used',
 
-    'NotificationPriceChangeSubject' => 'Change in product price',
+    'NotificationPriceChangeSubject' => 'Change in price for product :Productname',
     'NotificationPriceChangeGreeting' => 'Hey %s,',
     'NotificationPriceChangeLine1' => '%s is now priced at %s %01.2f.',
     'NotificationPriceChangeLine2' => 'The old price was %s %01.2f (%s%01.1f%%).',
