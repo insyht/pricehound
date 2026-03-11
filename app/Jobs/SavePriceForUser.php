@@ -48,8 +48,11 @@ class SavePriceForUser implements ShouldQueue
                         'created_at' => $this->createdAt,
                     ]
                 );
-                NotifyUserAboutPrice::dispatch($price);
             }
+            // Run the NotifyUserAboutPrice even if the price hasn't changed, because a user might have changed his
+            // price notification rules after the previous price, so this price might not have triggered a rule before
+            // but might trigger one now, even though the price is the same as it was then
+            NotifyUserAboutPrice::dispatch($price);
         } catch (Throwable $t) {
             Log::warning(
                 'Could not save price',

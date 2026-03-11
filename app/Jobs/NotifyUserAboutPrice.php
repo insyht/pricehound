@@ -25,10 +25,6 @@ class NotifyUserAboutPrice implements ShouldQueue
                                        ->where('fetched_at', '<', $this->price->fetched_at)
                                        ->orderByDesc('fetched_at')
                                        ->first();
-        if (!$lastPriceBeforeThisOne) {
-            return;
-        }
-
         if ($helper->shouldSendPriceNotification($lastPriceBeforeThisOne, $this->price)) {
             $this->price->user->notify(new PriceChange($lastPriceBeforeThisOne, $this->price));
         } else {

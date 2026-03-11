@@ -6,7 +6,6 @@ use App\Enums\HoundEndpoints;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
