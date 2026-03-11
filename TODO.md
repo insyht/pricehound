@@ -6,7 +6,8 @@ Queue verwerken:
 - ddev artisan queue:work
 FetchScheduler handmatig runnen:
 - ddev artisan app:fetch-scheduler
-
+Tests draaien:
+- ddev artisan test
 Todo:
 
 - Een route maken waarbij je de prijsgeschiedenis van een product kunt opvragen, 1 tabel per shop (zie ook prices.index voor een visueel voorbeeld)
