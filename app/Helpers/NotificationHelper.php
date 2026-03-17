@@ -91,7 +91,7 @@ class NotificationHelper
                             '%s (%s %s)',
                             PriceRuleTypes::BELOW_PRICE->value,
                             $newPrice->price->getCurrency(),
-                            $ruleValue->getAmount()
+                            $ruleValue->getAmount() / 100
                         );
                     }
                     break;
@@ -102,7 +102,7 @@ class NotificationHelper
                             '%s (%s %s)',
                             PriceRuleTypes::ABOVE_PRICE->value,
                             $newPrice->price->getCurrency(),
-                            $ruleValue->getAmount()
+                            $ruleValue->getAmount() / 100
                         );
                     }
                     break;
@@ -147,7 +147,7 @@ class NotificationHelper
                             '%s (%s %s)',
                             PriceRuleTypes::DECREASE_AMOUNT->value,
                             $newPrice->price->getCurrency(),
-                            $ruleValue->getAmount()
+                            $ruleValue->getAmount() / 100
                         );
                     }
                     break;
@@ -164,7 +164,7 @@ class NotificationHelper
                             '%s (%s %s)',
                             PriceRuleTypes::INCREASE_AMOUNT->value,
                             $newPrice->price->getCurrency(),
-                            $ruleValue->getAmount()
+                            $ruleValue->getAmount() / 100
                         );
                     }
                     break;
