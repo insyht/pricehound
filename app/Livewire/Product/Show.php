@@ -3,6 +3,7 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
+use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Livewire\Component;
 
 class Show extends Component
@@ -18,6 +19,15 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.product.show', ['product' => $this->product]);
+        $lineChartModel = LivewireCharts::lineChartModel()
+                                        ->withOnPointClickEvent('onPointClick')
+                                        ->setSmoothCurve()
+                                        ->setXAxisVisible(true)
+                                        ->setDataLabelsEnabled(true);
+        foreach ($this->product->prices->sortBy('fetched_at') as $price) {
+            $lineChartModel->addPoint($price->fetched_at->format('d-m-Y H:i'), $price->price->getAmount() / 100);
+        }
+
+        return view('livewire.product.show', ['product' => $this->product, 'lineChartModel' => $lineChartModel]);
     }
 }
