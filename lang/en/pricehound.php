@@ -24,6 +24,7 @@ return [
     'Title' => 'Title',
     'EAN' => 'EAN',
     'EAN13' => 'EAN-13',
+    'Identifier' => 'Identifier',
     'LowestPrice' => 'Lowest price',
     'Actions' => 'Actions',
     'View' => 'View',

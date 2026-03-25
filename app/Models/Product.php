@@ -11,7 +11,7 @@ class Product extends Model
 
     protected $fillable = [
         'title',
-        'ean',
+        'identifier',
         'created_by_user_id',
     ];
 

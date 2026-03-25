@@ -15,8 +15,8 @@
                 <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $product->title }}</td>
             </tr>
             <tr>
-                <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">EAN</td>
-                <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $product->ean }}</td>
+                <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">Identifier</td>
+                <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $product->identifier }}</td>
             </tr>
             <tr>
                 <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">Urls + price</td>

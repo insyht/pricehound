@@ -7,9 +7,9 @@
                 <div class="text-danger">{{ $message }}</div>
             @enderror
 
-            <label for="ean" style="color: white">{{  __('pricehound.EAN13') }}</label>
-            <input type="text" id="ean" wire:model="ean" class="form-control" style="color: white; border: 1px solid white" required><br />
-            @error('ean')
+            <label for="identifier" style="color: white">{{  __('pricehound.Identifier') }}</label>
+            <input type="text" id="identifier" wire:model="identifier" class="form-control" style="color: white; border: 1px solid white" required><br />
+            @error('identifier')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
 

@@ -9,11 +9,11 @@ class Add extends Component
 {
     protected $rules = [
         'title' => 'required|string',
-        'ean' => 'required|string|digits:13',
+        'identifier' => 'required|string',
     ];
 
     public string $title = '';
-    public string $ean = '';
+    public string $identifier = '';
 
     public function render()
     {
@@ -26,7 +26,7 @@ class Add extends Component
 
         Product::create([
                          'title' => $this->title,
-                         'ean' => $this->ean,
+                         'identifier' => $this->identifier,
                      ]);
         // Todo Dit moet anders, je moet hier een product kunnen zoeken in de database en deze koppelen aan de gebruiker
         return redirect()->route('products.index')->with('success', 'Product created successfully.');

@@ -21,7 +21,7 @@ class ProductFactory extends Factory
     {
         return [
             'title' => fake()->word(),
-            'ean' => (int) fake()->ean13(),
+            'identifier' => (int) fake()->ean13(),
             'created_by_user_id' => User::factory(),
         ];
     }

@@ -57,21 +57,21 @@ class Test extends Seeder
         $product = Product::create(
             [
                 'title' => 'Philips Hue Bridge Pro',
-                'ean' => '8720169155114',
+                'identifier' => '8720169155114',
                 'created_by_user_id' => $jordy->id,
             ]
         );
         $anotherProduct = Product::create(
             [
                 'title' => 'Another product',
-                'ean' => '4711081440178',
+                'identifier' => '4711081440178',
                 'created_by_user_id' => $otherUser->id,
             ]
         );
         $thirdProduct = Product::create(
             [
                 'title' => 'Third product',
-                'ean' => '12345',
+                'identifier' => '12345',
                 'created_by_user_id' => null,
             ]
         );
