@@ -5,7 +5,10 @@ namespace Database\Factories;
 use App\Models\Hound;
 use App\Models\Price;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Money\Currency;
+use Money\Money;
 
 class PriceFactory extends Factory
 {
@@ -14,10 +17,11 @@ class PriceFactory extends Factory
     public function definition(): array
     {
         return [
-            'price' => fake()->numberBetween(1, 10000000), // between one cent and 100.000 euros
             'currency' => fake()->currencyCode(),
+            'price' => fn (array $attributes) => new Money(fake()->numberBetween(1, 10000000), new Currency($attributes['currency'])),
             'url' => fake()->url(),
             'product_id' => Product::factory(),
+            'user_id' => User::factory(),
             'hound_id' => Hound::factory(),
             'fetched_at' => fake()->dateTime(),
         ];

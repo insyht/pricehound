@@ -15,11 +15,6 @@ class Product extends Model
         'created_by_user_id',
     ];
 
-    public function urls()
-    {
-        return $this->hasMany(Url::class);
-    }
-
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by_user_id');
