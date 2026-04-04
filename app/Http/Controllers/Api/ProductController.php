@@ -14,7 +14,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        if (auth()->user()->products->contains($product)) {
+        if (auth()?->user()?->products->contains($product)) {
             return response()->json($product->load('prices'));
         }
 
@@ -23,6 +23,6 @@ class ProductController extends Controller
 
     public function index()
     {
-        return response()->json(auth()->user()->products?->load('prices') ?? []);
+        return response()->json(auth()?->user()?->products->load('prices') ?? []);
     }
 }

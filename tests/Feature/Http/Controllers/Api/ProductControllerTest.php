@@ -30,6 +30,16 @@ it('returns a 404 error when getting a product a user does not have, in json for
     $this->actingAs($user)->getJson('api/products/' . $product->id)->assertNotFound()->assertJson(['error' => 'Product not found']);
 });
 
+it('returns a 401 when getting a user\'s product while not logged in', function () {
+    $product = Product::factory()->create();
+
+    $this->getJson('/api/products/' . $product->id)->assertUnauthorized();
+});
+
+it('returns a 401 when getting all user\'s products while not logged in', function () {
+    $this->getJson('/api/products')->assertUnauthorized();
+});
+
 it('returns all products a user has, in json format', function () {
     $product1 = Product::factory()->create();
     $product2 = Product::factory()->create();
