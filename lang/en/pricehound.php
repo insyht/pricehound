@@ -50,6 +50,11 @@ return [
     'LastChecked' => 'Last checked',
     'WhenPriceFetched' => 'Fetch date and time',
     'HoundUsed' => 'Hound used',
+    'NotLoggedIn' => 'Not logged in',
+    'HoundOfflineOrNoHoundChosenYet' => 'Hound offline or you have not chosen a hound yet',
+    'ProductNotFoundAtHound' => 'Product could not be found at the hound. Error message: :error_message',
+    'ProductAddedToWishlist' => 'Your product has been added to your wishlist',
+    'FailedGettingProductInfoFromHound' => 'I failed to find this product at your hound',
 
     'NotificationPriceChangeSubject' => 'Change in price for product :Productname',
     'NotificationPriceChangeGreeting' => 'Hey %s,',

@@ -1,3 +1,4 @@
+######## Handige commando's ########
 Database resetten:
 - ddev artisan migrate:fresh && ddev artisan db:seed --class=Test
 Scheduler draaien (die regelmatig FetchScheduler aanroept; zie routes/console.php):
@@ -8,12 +9,8 @@ FetchScheduler handmatig runnen:
 - ddev artisan app:fetch-scheduler
 Tests draaien:
 - ddev artisan test
-Todo:
 
-- Een route maken waarbij je de prijsgeschiedenis van een product kunt opvragen, 1 tabel per shop (zie ook prices.index voor een visueel voorbeeld)
-
-
-
+######## Todo ########
 
 ##########################
 Aanpassingen voor de Hounds:
