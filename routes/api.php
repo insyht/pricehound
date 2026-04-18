@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\AuthenticationController;
+use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
