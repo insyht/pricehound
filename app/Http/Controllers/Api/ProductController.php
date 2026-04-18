@@ -103,7 +103,7 @@ class ProductController extends Controller
         return response()->json(['error' => __('pricehound.FailedGettingProductInfoFromHound')], 500);
     }
 
-    public function show(Product $product)
+    public function show(Product $product): JsonResponse
     {
         if (auth()?->user()?->products->contains($product)) {
             return response()->json($product->load('prices'));
@@ -112,7 +112,7 @@ class ProductController extends Controller
         return response()->json(['error' => 'Product not found'], 404);
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json(auth()?->user()?->products->load('prices') ?? []);
     }
