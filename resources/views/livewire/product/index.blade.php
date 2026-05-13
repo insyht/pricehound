@@ -1,4 +1,8 @@
 <div>
+    <x-button href="{{ route('products.add') }}">{{  __('pricehound.AddProduct') }}</x-button>
+    <br />
+    <hr />
+    <br />
     <table class="w-full border-separate border border-gray-400 bg-white text-sm dark:border-gray-500 dark:bg-gray-800">
     <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
@@ -22,8 +26,4 @@
     @endforeach
     </tbody>
     </table>
-    <br />
-    <hr />
-    <br />
-    <x-button href="{{ route('products.add') }}">{{  __('pricehound.AddProduct') }}</x-button>
 </div>
