@@ -58,6 +58,8 @@ return [
     'AddNewProduct' => 'Add a new product',
     'ProductCreatedSuccessfully' => 'Product created successfully',
     'ProductAddedToWatchlist' => 'Product added to watchlist successfully',
+    'shopUrl' => 'Shop url',
+    'buy' => 'Buy',
 
     'NotificationPriceChangeSubject' => 'Change in price for product :Productname',
     'NotificationPriceChangeGreeting' => 'Hey %s,',
