@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @property \Money\Money $price;
@@ -63,20 +62,6 @@ class Price extends Model
                                  ->where('product_user.user_id', $this->user_id)
                                  ->select('price_rules.*')
                                  ->get();
-    }
-
-    public function scopeCheapest($query)
-    {
-        // todo Er is nu voortaan een user_id in deze tabel, laat onderstaande query hier rekening mee houden
-        // todo Not sure if this works, got it from ChatGPT
-        return $query->select('prices.*')
-                     ->join('products', 'products.id', '=', 'prices.product_id')
-                     ->join(DB::raw('(
-                            SELECT products.id, MIN(prices.id) AS price_id
-                            FROM prices
-                            JOIN products ON products.id = prices.product_id
-                            GROUP BY products.id
-                        ) AS lowest'), 'lowest.price_id', '=', 'prices.id');
     }
 
     public function scopeMine($query)
