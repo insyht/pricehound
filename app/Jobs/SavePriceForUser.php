@@ -36,7 +36,7 @@ class SavePriceForUser implements ShouldQueue
                  ->orderByDesc('fetched_at')
                 ->first();
             if (!$latestPrice || !$latestPrice->price->equals($priceValue)) {
-                $price = Price::create(
+                $latestPrice = Price::create(
                     [
                         'price' => $priceValue,
                         'currency' => $this->currency,
@@ -52,7 +52,7 @@ class SavePriceForUser implements ShouldQueue
             // Run the NotifyUserAboutPrice even if the price hasn't changed, because a user might have changed his
             // price notification rules after the previous price, so this price might not have triggered a rule before
             // but might trigger one now, even though the price is the same as it was then
-            NotifyUserAboutPrice::dispatch($price);
+            NotifyUserAboutPrice::dispatch($latestPrice);
         } catch (Throwable $t) {
             Log::warning(
                 'Could not save price',
