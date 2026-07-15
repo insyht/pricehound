@@ -22,11 +22,22 @@
     </table>
     <br />
 
-        <div class="shadow rounded p-4 border bg-white" style="height: 32rem;">
-            <livewire:livewire-line-chart
-                key="{{ $lineChartModel->reactiveKey() }}"
-                :line-chart-model="$lineChartModel"
-            />
+        <div class="shadow rounded p-4 border bg-white" style="height: 32rem;"
+            wire:ignore
+            x-data="{
+                chart: null,
+                init() {
+                    this.chart = new ApexCharts($refs.chart, {
+                        chart: { type: 'line', height: '100%', toolbar: { show: false } },
+                        series: [{ name: '{{ __('pricehound.Price') }}', data: @js($priceData) }],
+                        xaxis: { categories: @js($priceLabels) },
+                        stroke: { curve: 'smooth' },
+                        dataLabels: { enabled: true },
+                    });
+                    this.chart.render();
+                },
+            }">
+            <div x-ref="chart" class="h-full"></div>
         </div>
 
     <br />
