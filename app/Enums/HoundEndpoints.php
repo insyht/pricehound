@@ -8,4 +8,5 @@ enum HoundEndpoints: string
     case Profile = 'user';
     case FetchPricesForProducts = 'fetch/%s'; // string of an imploded (comma-separated) array of identifiers
     case GetProductInfoByIdentifier = 'product/%s';
+    case SearchProductByIdentifier = 'search/%s';
 }

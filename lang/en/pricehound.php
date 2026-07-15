@@ -55,6 +55,7 @@ return [
     'ProductNotFoundAtHound' => 'Product could not be found at the hound. Error message: :error_message',
     'ProductAddedToWishlist' => 'Your product has been added to your wishlist',
     'FailedGettingProductInfoFromHound' => 'I failed to find this product at your hound',
+    'FailedSearchingForProductThroughHound' => 'I failed to search for this product at your hound',
     'AddNewProduct' => 'Add a new product',
     'ProductCreatedSuccessfully' => 'Product created successfully',
     'ProductAddedToWatchlist' => 'Product added to watchlist successfully',

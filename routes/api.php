@@ -14,4 +14,5 @@ Route::prefix('products')->middleware(['auth:sanctum'])->name('api.products.')->
     Route::post('/add/{identifier}', [ProductController::class, 'add'])->name('add');
     Route::get('/{product}', [ProductController::class, 'show'])->name('show');
     Route::get('/', [ProductController::class, 'index'])->name('index');
+    Route::get('/search/{identifier}', [ProductController::class, 'search'])->name('search');
 });

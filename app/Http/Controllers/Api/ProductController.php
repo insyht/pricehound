@@ -116,4 +116,75 @@ class ProductController extends Controller
     {
         return response()->json(auth()?->user()?->products->load('prices') ?? []);
     }
+
+    public function search(string $identifier): JsonResponse
+    {
+        $user = auth()?->user() ?? null;
+        if ($user === null) {
+            Log::warning('Someone tried to search for a product without being logged in');
+
+            return response()->json(['error' => __('pricehound.NotLoggedIn')], 401);
+        }
+
+        if (!$user->hound?->online ?? false) {
+            Log::info(
+                sprintf('Can\'t get product info from Hound because it\'s offline'),
+                ['hound' => $user->hound->id, 'user' => $user->id]
+            );
+            PingHound::dispatchSync($user->hound);
+
+            // todo Maybe use a fallback Hound like 'Pricehound Official'?
+            return response()->json(['error' => __('pricehound.HoundOfflineOrNoHoundChosenYet')], 502);
+        }
+
+        try {
+            $url = rtrim($user->hound->url, '/') . '/';
+            $url .= sprintf(
+                HoundEndpoints::SearchProductByIdentifier->value,
+                base64_encode($identifier)
+            );
+            $response = Http::withToken($user->hound_api_key)->acceptJson()->get($url);
+            if ($response->unauthorized()) {
+                Log::warning(
+                    'Invalid API token',
+                    ['hound' => $user->hound->id, 'user' => $user]
+                );
+            }
+            if ($response->failed()) {
+                Log::notice(
+                    'Tried to search for a product through a hound but we received a 404 (response failed)',
+                    ['hound' => $user->hound->id, 'product' => $identifier, 'message' => $response->json('message', '(None)')]
+                );
+                return response()->json(
+                    [
+                        'error' => __(
+                            'pricehound.ProductNotFoundAtHound',
+                            ['error_message' => $response->json('message', '(None)')]
+                        )
+                    ],
+                    404
+                );
+            } elseif ($response->successful() && is_array($response->json('results'))) {
+                $results = [];
+                foreach ($response->json('results') as $result) {
+                    $results[] = [
+                        'id' => $result['id'],
+                        'title' => $result['title'],
+                    ];
+                }
+                return response()->json($results, 200);
+            } else {
+                throw new HttpResponseException(
+                    'Invalid data received from hound (missing key "data" in json or "data" is not an array)'
+                );
+            }
+        } catch (Throwable $t) {
+            Log::warning(
+                'Could not search for a product through the hound',
+                ['hound' => $user->hound->id, 'product' => $identifier, 'error' => $t->getMessage()]
+            );
+        }
+
+        return response()->json(['error' => __('pricehound.FailedSearchingForProductThroughHound')], 500);
+    }
 }
