@@ -30,6 +30,17 @@ class Product extends Model
     public function getLowestPriceAttribute(): ?Price
     {
         $user = auth()->user();
+
+        // When prices are already eager-loaded (e.g. the index/show endpoints call
+        // ->load('prices')), filter the in-memory collection to avoid an N+1 query per product.
+        if ($this->relationLoaded('prices')) {
+            return $this->prices
+                ->where('hound_id', $user->hound_id)
+                ->where('user_id', $user->id)
+                ->sortByDesc('fetched_at')
+                ->first();
+        }
+
         return $this->prices()
                   ->where('hound_id', $user->hound_id)
                   ->where('user_id', $user->id)

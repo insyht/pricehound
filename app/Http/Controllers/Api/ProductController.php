@@ -85,7 +85,9 @@ class ProductController extends Controller
                 } elseif ($productModel->title === '' || $productModel->title === static::PRODUCT_PLACEHOLDER_TITLE) {
                     $productModel->update(['title' => $response->json('data.title', static::PRODUCT_PLACEHOLDER_TITLE)]);
                 }
-                $user->products()->save($productModel);
+                // Idempotent attach: avoids a duplicate-key error when the product is already
+                // on the user's wishlist.
+                $user->products()->syncWithoutDetaching([$productModel->id]);
 
                 return response()->json(['success' => __('pricehound.ProductAddedToWishlist')], 200);
             } else {
@@ -169,6 +171,7 @@ class ProductController extends Controller
                 foreach ($response->json('results') as $result) {
                     $results[] = [
                         'id' => $result['id'],
+                        'identifier' => $result['identifier'],
                         'title' => $result['title'],
                     ];
                 }
