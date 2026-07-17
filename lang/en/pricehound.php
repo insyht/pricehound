@@ -61,6 +61,8 @@ return [
     'ProductAddedToWatchlist' => 'Product added to watchlist successfully',
     'shopUrl' => 'Shop url',
     'buy' => 'Buy',
+    'InvalidApiToken' => 'Invalid API token',
+    'CouldNotCreateProductAtHound' => 'Product not known at the Hound. We failed to create it there',
 
     'NotificationPriceChangeSubject' => 'Change in price for product :Productname',
     'NotificationPriceChangeGreeting' => 'Hey %s,',
