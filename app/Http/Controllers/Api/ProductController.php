@@ -16,8 +16,9 @@ class ProductController extends Controller
 {
     public const PRODUCT_PLACEHOLDER_TITLE =  'Placeholder title';
 
-    public function add(string $identifier, ?string $title = null): JsonResponse
+    public function add(string $identifier): JsonResponse
     {
+        $title = request()->input('title');
         $user = auth()?->user() ?? null;
         if ($user === null) {
             Log::warning('Someone tried to add a product to their watchlist without being logged in');
