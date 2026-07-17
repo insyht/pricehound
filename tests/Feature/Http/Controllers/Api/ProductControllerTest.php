@@ -94,20 +94,35 @@ it('returns a 500 when the hound connection throws an exception', function () {
         ->assertJson(['error' => __('pricehound.FailedGettingProductInfoFromHound')]);
 });
 
-it('returns a 404 when the hound cannot find the product', function () {
+it('creates the product at the hound when it does not have it yet, then adds it to the wishlist', function () {
     $hound = Hound::factory()->create(['online' => true, 'url' => 'http://hound.test']);
     $user = User::factory()->create(['hound_id' => $hound->id]);
 
-    Http::fake([
-        'hound.test/*' => Http::response(['message' => 'Product not found'], 404),
-    ]);
+    // First fetch: hound does not have the product yet (404). The controller then
+    // creates it (POST), after which the re-fetch (GET) returns the product info.
+    $productInfo = Http::response([
+        'data' => [
+            'title' => 'Freshly Created Product',
+            'identifier' => '1234567890123',
+        ],
+    ], 200);
+    Http::fakeSequence('hound.test/*')
+        ->push(['message' => 'Product not found'], 404)
+        ->pushResponse(Http::response(['data' => ['identifier' => '1234567890123']], 201))
+        ->pushResponse($productInfo);
 
     $this->actingAs($user)
         ->postJson('/api/products/add/1234567890123')
-        ->assertNotFound()
-        ->assertJson([
-            'error' => __('pricehound.ProductNotFoundAtHound', ['error_message' => 'Product not found']),
-        ]);
+        ->assertOk()
+        ->assertJson(['success' => __('pricehound.ProductAddedToWishlist')]);
+
+    $this->assertDatabaseHas('products', [
+        'title' => 'Freshly Created Product',
+        'identifier' => '1234567890123',
+        'created_by_user_id' => $user->id,
+    ]);
+
+    expect($user->products)->toHaveCount(1);
 });
 
 it('creates a new product and adds it to the user wishlist when the hound returns product info', function () {

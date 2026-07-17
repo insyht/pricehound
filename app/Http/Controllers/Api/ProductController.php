@@ -101,7 +101,7 @@ class ProductController extends Controller
                         404
                     );
                 } elseif ($fetchResponse->successful() && is_array($fetchResponse->json('data'))) {
-                    if ($productModel->title === '' || $productModel->title === static::PRODUCT_PLACEHOLDER_TITLE) {
+                    if ($productModel !== null) {
                         $productModel->update(['title' => $fetchResponse->json('data.title', static::PRODUCT_PLACEHOLDER_TITLE)]);
                     } else {
                         // We don't have this product yet, create it
@@ -134,6 +134,8 @@ class ProductController extends Controller
                     'Could not get product info from hound',
                     ['hound' => $user->hound->id, 'product' => $identifier, 'error' => $t->getMessage()]
                 );
+
+                return response()->json(['error' => __('pricehound.FailedGettingProductInfoFromHound')], 500);
             }
         }
         // Idempotent attach: avoids a duplicate-key error when the product is already
