@@ -96,4 +96,9 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(PriceRule::class, ProductUser::class);
     }
+
+    public function devices()
+    {
+        return $this->hasMany(Device::class);
+    }
 }

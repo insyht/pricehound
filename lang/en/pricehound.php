@@ -70,4 +70,7 @@ return [
     'NotificationPriceChangeLine2' => 'The old price was %s %01.2f (%s%01.1f%%).',
     'NotificationPriceChangeLine3' => 'This notification was triggered by the following rule(s): %s',
     'NotificationPriceChangeAction' => 'View the new price in the shop',
+    'NotificationPriceChangePushBody' => 'Now %s %01.2f, was %s %01.2f (%s%01.1f%%).',
+    'NotificationPriceChangePushBodyFirst' => 'Now %s %01.2f.',
+    'DeviceRegistered' => 'Device registered for notifications',
 ];
