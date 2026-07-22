@@ -248,3 +248,109 @@ it('returns a 404 when the hound returns a server error', function () {
             'error' => __('pricehound.ProductNotFoundAtHound', ['error_message' => 'Internal Server Error']),
         ]);
 });
+
+it('returns a 401 when searching for a product while not logged in', function () {
+    $this->getJson('/api/products/search/1234567890123')->assertUnauthorized();
+});
+
+it('returns a 502 when searching while the hound is offline', function () {
+    Bus::fake();
+
+    $hound = Hound::factory()->create(['online' => false]);
+    $user = User::factory()->create(['hound_id' => $hound->id]);
+
+    $this->actingAs($user)
+        ->getJson('/api/products/search/1234567890123')
+        ->assertStatus(502)
+        ->assertJson(['error' => __('pricehound.HoundOfflineOrNoHoundChosenYet')]);
+
+    Bus::assertDispatched(PingHound::class);
+});
+
+it('returns the search results the hound found, keeping only the public fields', function () {
+    $hound = Hound::factory()->create(['online' => true, 'url' => 'http://hound.test']);
+    $user = User::factory()->create(['hound_id' => $hound->id]);
+
+    Http::fake([
+        'hound.test/*' => Http::response([
+            'results' => [
+                ['id' => 1, 'identifier' => '1234567890123', 'title' => 'First Result', 'secret' => 'not-for-the-app'],
+                ['id' => 2, 'identifier' => '3210987654321', 'title' => 'Second Result'],
+            ],
+        ], 200),
+    ]);
+
+    $this->actingAs($user)
+        ->getJson('/api/products/search/1234567890123')
+        ->assertOk()
+        ->assertExactJson([
+            ['id' => 1, 'identifier' => '1234567890123', 'title' => 'First Result'],
+            ['id' => 2, 'identifier' => '3210987654321', 'title' => 'Second Result'],
+        ]);
+});
+
+it('sends the search term to the hound base64 encoded', function () {
+    $hound = Hound::factory()->create(['online' => true, 'url' => 'http://hound.test']);
+    $user = User::factory()->create(['hound_id' => $hound->id, 'hound_api_key' => 'secret-key']);
+
+    Http::fake(['hound.test/*' => Http::response(['results' => []], 200)]);
+
+    $this->actingAs($user)->getJson('/api/products/search/some product')->assertOk();
+
+    Http::assertSent(function ($request) {
+        return $request->url() === 'http://hound.test/search/' . base64_encode('some product')
+            && $request->hasHeader('Authorization', 'Bearer secret-key');
+    });
+});
+
+it('returns an empty list when the hound found nothing', function () {
+    $hound = Hound::factory()->create(['online' => true, 'url' => 'http://hound.test']);
+    $user = User::factory()->create(['hound_id' => $hound->id]);
+
+    Http::fake(['hound.test/*' => Http::response(['results' => []], 200)]);
+
+    $this->actingAs($user)
+        ->getJson('/api/products/search/1234567890123')
+        ->assertOk()
+        ->assertExactJson([]);
+});
+
+it('returns a 404 when the hound fails to search', function () {
+    $hound = Hound::factory()->create(['online' => true, 'url' => 'http://hound.test']);
+    $user = User::factory()->create(['hound_id' => $hound->id]);
+
+    Http::fake(['hound.test/*' => Http::response(['message' => 'Internal Server Error'], 500)]);
+
+    $this->actingAs($user)
+        ->getJson('/api/products/search/1234567890123')
+        ->assertNotFound()
+        ->assertJson([
+            'error' => __('pricehound.ProductNotFoundAtHound', ['error_message' => 'Internal Server Error']),
+        ]);
+});
+
+it('returns a 500 when the hound returns a response without usable results', function () {
+    $hound = Hound::factory()->create(['online' => true, 'url' => 'http://hound.test']);
+    $user = User::factory()->create(['hound_id' => $hound->id]);
+
+    Http::fake(['hound.test/*' => Http::response(['results' => 'not-an-array'], 200)]);
+
+    $this->actingAs($user)
+        ->getJson('/api/products/search/1234567890123')
+        ->assertStatus(500)
+        ->assertJson(['error' => __('pricehound.FailedSearchingForProductThroughHound')]);
+});
+
+it('returns a 500 when the hound connection throws during a search', function () {
+    $hound = Hound::factory()->create(['online' => true, 'url' => 'http://hound.test']);
+    $user = User::factory()->create(['hound_id' => $hound->id]);
+
+    Http::fake([
+        'hound.test/*' => fn () => throw new \RuntimeException('Connection refused'),
+    ]);
+
+    $this->actingAs($user)
+        ->getJson('/api/products/search/1234567890123')
+        ->assertStatus(500)
+        ->assertJson(['error' => __('pricehound.FailedSearchingForProductThroughHound')]);
+});
