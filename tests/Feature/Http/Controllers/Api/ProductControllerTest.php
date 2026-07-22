@@ -8,12 +8,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 pest()->use(RefreshDatabase::class);
-
-beforeEach(function () {
-    $this->productController = new ProductController();
-});
 
 it('returns a requested product a user has, in json format', function () {
     $product = Product::factory()->create();
@@ -334,11 +331,19 @@ it('returns a 500 when the hound returns a response without usable results', fun
     $user = User::factory()->create(['hound_id' => $hound->id]);
 
     Http::fake(['hound.test/*' => Http::response(['results' => 'not-an-array'], 200)]);
+    Log::spy();
 
     $this->actingAs($user)
         ->getJson('/api/products/search/1234567890123')
         ->assertStatus(500)
         ->assertJson(['error' => __('pricehound.FailedSearchingForProductThroughHound')]);
+
+    // The 500 alone does not prove much: the catch-all `catch (Throwable)` would produce it for
+    // any error, including the thrown exception itself being broken. Assert on what was logged.
+    Log::shouldHaveReceived('warning')->withArgs(function ($message, $context) {
+        return $message === 'Could not search for a product through the hound'
+            && str_contains($context['error'], 'Invalid data received from hound');
+    })->once();
 });
 
 it('returns a 500 when the hound connection throws during a search', function () {

@@ -6,10 +6,10 @@ use App\Enums\HoundEndpoints;
 use App\Http\Controllers\Controller;
 use App\Jobs\PingHound;
 use App\Models\Product;
-use HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
 use Throwable;
 
 class ProductController extends Controller
@@ -218,7 +218,7 @@ class ProductController extends Controller
                 }
                 return response()->json($results, 200);
             } else {
-                throw new HttpResponseException(
+                throw new RuntimeException(
                     'Invalid data received from hound (missing key "data" in json or "data" is not an array)'
                 );
             }
