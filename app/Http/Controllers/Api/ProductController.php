@@ -149,7 +149,7 @@ class ProductController extends Controller
     public function show(Product $product): JsonResponse
     {
         if (auth()?->user()?->products->contains($product)) {
-            return response()->json($product->load('prices'));
+            return response()->json(auth()?->user()?->products->firstWhere('id', $product->id)->load('prices'));
         }
 
         return response()->json(['error' => 'Product not found'], 404);

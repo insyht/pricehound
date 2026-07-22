@@ -64,7 +64,7 @@ class FetchPricesForUser implements ShouldQueue
                         );
                         continue;
                     }
-                    SavePriceForUser::dispatch($this->user, $productModel, $product['currency'], $product['url'], Carbon::createFromFormat('Y-m-d H:i:s', $product['created_at']), $product['price']);
+                    SavePriceForUser::dispatch($this->user, $productModel, $product['currency'], $product['url'], Carbon::createFromFormat('Y-m-d H:i:s', $product['created_at']), $product['price'], $product['checked_at']);
                 }
             } else {
                 Log::warning(

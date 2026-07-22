@@ -23,12 +23,14 @@ class SavePriceForUser implements ShouldQueue
         protected string $currency,
         protected string $url,
         protected Carbon $createdAt,
-        protected int $price
+        protected int $price,
+        protected ?Carbon $checkedAt
     ) {}
 
     public function handle(): void
     {
         try {
+            $this->user->products()->updateExistingPivot($this->product->id, ['checked_at' => $this->checkedAt]);
             $priceValue = new Money($this->price, new Currency($this->currency));
 
             $latestPrice = Price::withoutGlobalScope('mine')->where('product_id', $this->product->id)
