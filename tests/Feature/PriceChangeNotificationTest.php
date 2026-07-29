@@ -36,6 +36,7 @@ function priceOf(int $amount, Product $product, User $user, string $fetchedAt): 
         'product_id' => $product->id,
         'user_id' => $user->id,
         'fetched_at' => $fetchedAt,
+        'notified' => false
     ]);
 }
 
