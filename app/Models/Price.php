@@ -23,6 +23,7 @@ class Price extends Model
         'currency',
         'url',
         'fetched_at',
+        'notified',
     ];
 
     protected function casts(): array
@@ -30,6 +31,7 @@ class Price extends Model
         return [
             'price' => AsMoney::class,
             'fetched_at' => 'datetime',
+            'notified' => 'boolean',
         ];
     }
 
