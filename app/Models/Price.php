@@ -23,6 +23,7 @@ class Price extends Model
         'currency',
         'url',
         'fetched_at',
+        'created_at',
         'notified',
     ];
 

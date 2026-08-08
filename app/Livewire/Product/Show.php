@@ -23,7 +23,7 @@ class Show extends Component
 
         if ($this->product !== null) {
             foreach ($this->product->prices->sortBy('fetched_at') as $price) {
-                $priceLabels[] = $price->fetched_at->format('d-m-Y H:i');
+                $priceLabels[] = $price->fetched_at->timezone(config('app.display_timezone'))->format('d-m-Y H:i');
                 $priceData[] = $price->price->getAmount() / 100;
             }
         }

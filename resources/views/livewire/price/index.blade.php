@@ -22,7 +22,7 @@
                             </a>
                         @endif
                     </td>
-                    <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $lowestPricePerProduct->created_at->format('d-m-Y H:i:s') }}</td>
+                    <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $lowestPricePerProduct->created_at->timezone(config('app.display_timezone'))->format('d-m-Y H:i:s') }}</td>
                 </tr>
         @endforeach
         </tbody>

@@ -54,7 +54,7 @@
         <tbody>
             @foreach ($product->prices as $price)
             <tr>
-                <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $price->created_at->format('d-m-Y H:i:s') }}</td>
+                <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $price->created_at->timezone(config('app.display_timezone'))->format('d-m-Y H:i:s') }}</td>
                 <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $price->url }}</td>
                 <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $price->hound?->name }}</td>
                 <td class="border border-gray-300 p-4 text-gray-500 dark:border-gray-700 dark:text-gray-400">{{ $price->price->getAmount() / 100 }} {{ $price->currency }}</td>

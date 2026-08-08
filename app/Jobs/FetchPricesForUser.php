@@ -40,40 +40,43 @@ class FetchPricesForUser implements ShouldQueue
             );
             $response = Http::withToken($this->user->hound_api_key)->acceptJson()->get($url); // todo Ik moet nog iets maken om die token te verversen denk ik
             $data = json_decode($response->body(), true);
-            if ($response->unauthorized()) {
-                Log::warning(
-                    'Invalid API token',
-                    ['hound' => $this->user->hound->id, 'user' => $this->user]
-                );
-            }
-            if ($response->failed()) {
-                Log::warning(
-                    'Could not fetch prices from hound (response failed), dispatching PingHound to check availability',
-                    ['hound' => $this->user->hound->id, 'products' => $identifiers]
-                );
-                PingHound::dispatchSync($this->user->hound);
 
-                return;
-            } elseif ($response->successful() && is_array($data)) {
-                foreach ($data as $product) {
-                    $productModel = Product::where('identifier', $product['identifier'])->first();
-                    if ($productModel === null) {
-                        Log::warning(
-                            'Product not found while fetching prices for user',
-                            ['identifier' => $product['identifier'], 'user_id' => $this->user->id, 'hound' => $this->user->hound->id]
-                        );
-                        continue;
+            switch (true) {
+                case $response->unauthorized():
+                    Log::warning(
+                        'Invalid API token',
+                        ['hound' => $this->user->hound->id, 'user' => $this->user]
+                    );
+                    break;
+                case $response->failed():
+                    Log::warning(
+                        'Could not fetch prices from hound (response failed), dispatching PingHound to check availability',
+                        ['hound' => $this->user->hound->id, 'products' => $identifiers]
+                    );
+                    PingHound::dispatchSync($this->user->hound);
+                    break;
+                case $response->successful() && is_array($data):
+                    foreach ($data as $product) {
+                        $productModel = Product::where('identifier', $product['identifier'])->first();
+                        if ($productModel === null) {
+                            Log::warning(
+                                'Product not found while fetching prices for user',
+                                ['identifier' => $product['identifier'], 'user_id' => $this->user->id, 'hound' => $this->user->hound->id]
+                            );
+                            continue;
+                        }
+                        // ->utc() so the stored value is UTC wall-clock: Eloquent formats a Carbon in
+                        // its own timezone, so an offset like +02:00 would otherwise be stored verbatim.
+                        $checkedAt = $product['checked_at'] ? Carbon::parse($product['checked_at'])->utc() : null;
+                        SavePriceForUser::dispatch($this->user, $productModel, $product['currency'], $product['url'], Carbon::parse($product['created_at'])->utc(), $product['price'], $checkedAt);
                     }
-                    $checkedAt = $product['checked_at'] ? Carbon::createFromFormat('Y-m-d H:i:s', $product['checked_at']) : null;
-                    SavePriceForUser::dispatch($this->user, $productModel, $product['currency'], $product['url'], Carbon::createFromFormat('Y-m-d H:i:s', $product['created_at']), $product['price'], $checkedAt);
-                }
-            } else {
-                Log::warning(
-                    'Could not fetch prices from hound (invalid response)',
-                    ['hound' => $this->user->hound->id, 'products' => $identifiers, 'response' => $response->body() ?? '']
-                );
-
-                return;
+                    break;
+                default:
+                    Log::warning(
+                        'Could not fetch prices from hound (invalid response)',
+                        ['hound' => $this->user->hound->id, 'products' => $identifiers, 'response' => $response->body() ?? '']
+                    );
+                    break;
             }
         } catch (Throwable $t) {
             Log::warning(
