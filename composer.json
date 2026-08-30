@@ -13,7 +13,7 @@
         "google/auth": "^1.52",
         "illuminate/support": "*",
         "laravel/framework": "^13.0",
-        "laravel/nightwatch": "^1.0",
+        "laravel/nightwatch": "^1.30",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
         "livewire/flux": "^2.1.1",
