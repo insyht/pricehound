@@ -27,6 +27,7 @@ class User extends Authenticatable
         'hound_api_key',
         'next_fetch',
         'fetch_interval',
+        'join_the_pack',
     ];
 
     /**
@@ -51,6 +52,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'next_fetch' => 'datetime',
             'fetch_interval' => 'integer',
+            'join_the_pack' => 'boolean',
         ];
     }
 
