@@ -22,6 +22,6 @@ class UserController extends Controller
             ]
         );
 
-        return response()->json(['success' => __('pricehound.ProductAddedToWishlist')], 200);
+        return response()->json(['success' => __('pricehound.UserUpdated')], 200);
     }
 }

@@ -63,6 +63,7 @@ return [
     'buy' => 'Buy',
     'InvalidApiToken' => 'Invalid API token',
     'CouldNotCreateProductAtHound' => 'Product not known at the Hound. We failed to create it there',
+    'UserUpdated' => 'Updated user settings',
 
     'NotificationPriceChangeSubject' => 'Change in price for product :Productname',
     'NotificationPriceChangeGreeting' => 'Hey %s,',
