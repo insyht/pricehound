@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\DeviceController;
+use App\Http\Controllers\Api\PackController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -23,3 +24,9 @@ Route::prefix('products')->middleware(['auth:sanctum'])->name('api.products.')->
     Route::get('/', [ProductController::class, 'index'])->name('index');
     Route::get('/search/{identifier}', [ProductController::class, 'search'])->name('search');
 });
+
+Route::prefix('pack')->middleware([/* Check if the request is really from a known Hound */])->name('api.pack.')->group(function () {
+    Route::post('/get-source', [PackController::class, 'getSource'])->name('get-source');
+    Route::post('/retrieve-source', [PackController::class, 'retrieveSource'])->middleware('auth:sanctum');
+});
+

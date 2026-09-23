@@ -74,4 +74,7 @@ return [
     'NotificationPriceChangePushBody' => 'Now %s %01.2f, was %s %01.2f (%s%01.1f%%).',
     'NotificationPriceChangePushBodyFirst' => 'Now %s %01.2f.',
     'DeviceRegistered' => 'Device registered for notifications',
+
+    'RetrieveSourceTooSlow' => 'Someone else was faster than you. Better luck next time!',
+    'RetrieveSourceSuccess' => 'We have received the source you sent us, excellent work!',
 ];
