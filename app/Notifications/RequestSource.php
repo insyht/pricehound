@@ -30,6 +30,7 @@ class RequestSource extends Notification implements ShouldQueue
     {
         return [
             'id' => $this->command->id,
+            'type' => 'request-source',
             'url' => $this->command->url,
             'headers' => json_encode($this->command->headers),
         ];
