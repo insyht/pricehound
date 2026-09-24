@@ -25,7 +25,7 @@ Route::prefix('products')->middleware(['auth:sanctum'])->name('api.products.')->
     Route::get('/search/{identifier}', [ProductController::class, 'search'])->name('search');
 });
 
-Route::prefix('pack')->middleware([/* Check if the request is really from a known Hound */])->name('api.pack.')->group(function () {
+Route::prefix('pack')->middleware([/* todo Check if the request is really from a known Hound */])->name('api.pack.')->group(function () {
     Route::post('/get-source', [PackController::class, 'getSource'])->name('get-source');
     Route::post('/retrieve-source', [PackController::class, 'retrieveSource'])->middleware('auth:sanctum');
 });

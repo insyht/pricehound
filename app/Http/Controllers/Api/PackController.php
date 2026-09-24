@@ -24,7 +24,7 @@ class PackController extends Controller
                 'id' => 'required|string',
                 'url' => 'required|url',
                 'headers' => 'required|array',
-                'callback_url' => 'required|url',
+                'callback_url' => 'required|string',
             ]
         );
         $hound = Hound::first(); // todo How will I determine the Hound this request came from? I can't trust what the request claims
@@ -44,12 +44,14 @@ class PackController extends Controller
 
     public function retrieveSource(Request $request): JsonResponse
     {
+        \Illuminate\Log\log('Recieved source');
         $validated = $request->validate(
             [
                 'id' => 'required|string',
                 'source' => 'required|string',
             ]
         );
+        \Illuminate\Log\log('Source:', ['id' => $validated['id'], 'source' => base64_encode($validated['source'])]);
         $requestModel = \App\Models\Request::where('request_id', $validated['id'])->first();
         if (!$requestModel) {
             return response()->json(
