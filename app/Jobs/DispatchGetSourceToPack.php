@@ -18,12 +18,6 @@ class DispatchGetSourceToPack implements ShouldQueue
 
     public function handle(): void
     {
-        if (stripos($this->command->callbackUrl, $this->command->hound->url) !== 0) {
-            // The callback url should start with the same url as the hound.
-            // This check is to prevent a malicious "Hound" from forcing us to send requests to urls they don't own
-            return;
-        }
-
         // todo I need to perform a check/validation on $this->command->url to prevent our users from becoming part of a botnet for a malicious "Hound"
 
         Request::create(
